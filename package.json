@@ -1,0 +1,82 @@
+{
+  "name": "replace-pilot",
+  "displayName": "Replace Pilot",
+  "description": "An AI-powered extension that transforms text based on customizable rules, enabling seamless and intelligent text modifications directly within VSCode.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "replace-pilot.run",
+        "title": "Run Replace Pilot"
+      }
+    ],
+    "configuration": {
+      "title": "Replace Pilot rules",
+      "type": "object",
+      "properties": {
+        "replace-pilot.rules": {
+          "type": "array",
+          "description": "An array of rules that Replace Pilot will use to transform text.",
+          "default": [
+            {
+              "id": "sample-uppercase",
+              "title": "(Sample) Uppercase",
+              "prompt": "Convert text to uppercase."
+            }
+          ],
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "A unique identifier for the rule."
+              },
+              "title": {
+                "type": "string",
+                "description": "The title of the rule."
+              },
+              "prompt": {
+                "type": "string",
+                "description": "The prompt that will be used by language models to transform text."
+              }
+            },
+            "required": ["title", "prompt"]
+          }
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.92.0",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "18.x",
+    "@typescript-eslint/eslint-plugin": "^7.0.2",
+    "@typescript-eslint/parser": "^7.0.2",
+    "eslint": "^8.56.0",
+    "typescript": "^5.3.3",
+    "ts-loader": "^9.5.1",
+    "webpack": "^5.90.3",
+    "webpack-cli": "^5.1.4",
+    "@vscode/test-cli": "^0.0.6",
+    "@vscode/test-electron": "^2.3.9"
+  }
+}
