@@ -2,6 +2,7 @@
   "name": "replace-pilot",
   "displayName": "Replace Pilot",
   "description": "An AI-powered extension that transforms text based on customizable rules, enabling seamless and intelligent text modifications directly within VSCode.",
+  "icon": "images/icon.png",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.90.0"
