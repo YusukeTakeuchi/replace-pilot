@@ -46,7 +46,7 @@
 ]
 ```
 
-- **id**: A unique identifier for each rule.
+- **id**: (optional) A unique identifier for each rule. Can be specified by command args.
 - **title**: The display name of the rule shown in the quick pick menu.
 - **prompt**: The prompt used for transformation, serving as an instruction to the language model.
 
@@ -60,6 +60,20 @@ Below is a sample rule that converts text to uppercase.
     "id": "uppercase",
     "title": "Uppercase Conversion",
     "prompt": "Convert the text to uppercase."
+  }
+]
+```
+
+prompt can be an array of strings.
+
+```json
+"replace-pilot.rules": [
+  {
+    "title": "Uppercase Conversion except prepositions",
+    "prompt": [
+      "Convert the text to uppercase.",
+      "but leave the prepositions as they are."
+    ]
   }
 ]
 ```
