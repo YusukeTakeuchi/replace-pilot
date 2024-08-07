@@ -1,11 +1,23 @@
 import * as vscode from "vscode";
 import { LanguageModelChatMessage } from "vscode";
 
-type Rule = {
+class Rule {
   id?: string;
   title: string;
-  prompt: string;
-};
+  prompt: string | string[];
+
+  constructor({ id, title, prompt }: RuleConfig) {
+    this.id = id;
+    this.title = title;
+    this.prompt = prompt;
+  }
+
+  promptString(): string {
+    return Array.isArray(this.prompt) ? this.prompt.join("\n") : this.prompt;
+  }
+}
+
+type RuleConfig = Pick<Rule, "id" | "title" | "prompt">;
 
 type CommandArgs = {
   ruleId?: string;
@@ -18,11 +30,13 @@ export async function runReplacer(args: CommandArgs = {}) {
     return;
   }
 
-  const rules: Rule[] = vscode.workspace.getConfiguration().get("replace-pilot.rules") || [];
-  if (rules.length === 0) {
+  const rulesConfig: RuleConfig[] = vscode.workspace.getConfiguration().get("replace-pilot.rules") || [];
+  if (rulesConfig.length === 0) {
     vscode.window.showInformationMessage("No transformation rules found");
     return;
   }
+
+  const rules = rulesConfig.map(ruleConfig => new Rule(ruleConfig));
 
   let selectedRule;
 
@@ -62,7 +76,7 @@ function findRuleById(rules: Rule[], id: string): Rule | undefined {
 async function chooseRule(rules: Rule[]): Promise<Rule | undefined> {
   const options = rules.map(rule => ({
     label: rule.title,
-    description: rule.prompt,
+    description: rule.promptString(),
     rule: rule,
   }));
 
@@ -108,7 +122,7 @@ async function transformTextWithLm(text: string, rule: Rule): Promise<string> {
 function createPrompt(text: string, rule: Rule): LanguageModelChatMessage[] {
   return [
     LanguageModelChatMessage.User("Transform the text with the rule below:\n-------------------\n"),
-    LanguageModelChatMessage.User(`rule: ${rule.prompt}\n-------------------\n`),
+    LanguageModelChatMessage.User(`rule: ${rule.promptString()}\n-------------------\n`),
     LanguageModelChatMessage.User(`${text}`),
   ];
 }

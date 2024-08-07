@@ -43,10 +43,13 @@
                 "type": "string",
                 "description": "The title of the rule."
               },
-              "prompt": {
-                "type": "string",
+            "prompt": {
+                "type": ["string", "array"],
+                "items": {
+                  "type": "string"
+                },
                 "description": "The prompt that will be used by language models to transform text."
-              }
+            }
             },
             "required": ["title", "prompt"]
           }
